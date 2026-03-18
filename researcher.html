@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Researcher Dashboard - Oxyy</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, sans-serif;
+        }
+
+        :root {
+            --navy-dark: #ff4b00;
+            --navy-deep: #ff4b00;
+            --green-primary: #ff4b00;
+            --text-dark: #0a2239;
+            --text-light: #6b7c93;
+            --bg-white: #ffffff;
+            --border-light: #e4e9f0;
+            --bg-light: #f8fafc;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            min-height: 100vh;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background: var(--bg-white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--navy-dark);
+            text-decoration: none;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+        }
+
+        .nav-link:hover {
+            color: var(--green-primary);
+            background: rgba(255, 75, 0, 0.05);
+        }
+
+        .nav-link.active {
+            color: var(--green-primary);
+            background: rgba(255, 75, 0, 0.1);
+            font-weight: 600;
+        }
+
+        .nav-link i {
+            width: 18px;
+            height: 18px;
+        }
+
+        .profile-dropdown {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 16px;
+            background: var(--bg-light);
+            border-radius: 40px;
+            border: 1px solid var(--border-light);
+        }
+
+        .profile-btn img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .dropdown-content {
+            position: absolute;
+            top: 60px;
+            right: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            width: 250px;
+            display: none;
+            z-index: 1000;
+        }
+
+        .dropdown-content.show {
+            display: block;
+        }
+
+        .dropdown-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .dropdown-header h4 {
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .dropdown-header p {
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .dropdown-item:hover {
+            background: var(--bg-light);
+            color: var(--green-primary);
+        }
+
+        .dropdown-item i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 6px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-dark);
+            transition: 0.3s;
+        }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 70px;
+            left: -100%;
+            width: 100%;
+            height: calc(100vh - 70px);
+            background: white;
+            transition: 0.3s;
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .mobile-menu.active {
+            left: 0;
+        }
+
+        .mobile-nav-links {
+            padding: 2rem;
+        }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-bottom: 1px solid var(--border-light);
+            transition: 0.3s;
+        }
+
+        .mobile-nav-link:hover {
+            background: var(--bg-light);
+            color: var(--green-primary);
+        }
+
+        .mobile-nav-link i {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 2rem;
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--navy-dark), var(--green-primary));
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-banner h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .welcome-banner p {
+            opacity: 0.9;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(255, 75, 0, 0.15);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 75, 0, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-icon i {
+            width: 24px;
+            height: 24px;
+            color: var(--green-primary);
+        }
+
+        .stat-info h3 {
+            font-size: 14px;
+            color: var(--text-light);
+            margin-bottom: 4px;
+        }
+
+        .stat-info p {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* Section Title */
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-title h2 {
+            color: var(--text-dark);
+            font-size: 20px;
+        }
+
+        .view-all {
+            color: var(--green-primary);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        /* Appointments/Meetings Section */
+        .appointments-list {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .appointment-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .appointment-item:hover {
+            background: var(--bg-light);
+        }
+
+        .appointment-item:last-child {
+            border-bottom: none;
+        }
+
+        .appointment-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .appointment-date {
+            text-align: center;
+            min-width: 80px;
+            background: rgba(255, 75, 0, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .appointment-date .day {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--green-primary);
+        }
+
+        .appointment-date .month {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+
+        .appointment-details h4 {
+            color: var(--text-dark);
+            margin-bottom: 4px;
+            font-size: 18px;
+        }
+
+        .appointment-details p {
+            color: var(--text-light);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .appointment-details p i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .appointment-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .appointment-btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--green-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #e04300;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--green-primary);
+            color: var(--green-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--green-primary);
+            color: white;
+        }
+
+        .appointment-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-confirmed {
+            background: #e6f7e6;
+            color: #00a86b;
+        }
+
+        .status-pending {
+            background: #fff3e6;
+            color: #ff8c42;
+        }
+
+        /* Research Papers/Records Grid */
+        .records-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .record-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .record-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(255, 75, 0, 0.15);
+        }
+
+        .record-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .record-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 75, 0, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .record-icon i {
+            width: 24px;
+            height: 24px;
+            color: var(--green-primary);
+        }
+
+        .record-title h3 {
+            color: var(--text-dark);
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .record-title p {
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        .record-details {
+            margin-bottom: 1rem;
+        }
+
+        .record-detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed var(--border-light);
+        }
+
+        .record-detail span:first-child {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .record-detail span:last-child {
+            color: var(--text-dark);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .record-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 1rem;
+        }
+
+        .record-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+            text-align: center;
+        }
+
+        /* Clinical Trials/Projects Grid */
+        .trials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .trial-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .trial-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(255, 75, 0, 0.15);
+        }
+
+        .trial-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .trial-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(255, 75, 0, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .trial-icon i {
+            width: 24px;
+            height: 24px;
+            color: var(--green-primary);
+        }
+
+        .trial-info h3 {
+            color: var(--text-dark);
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .trial-info p {
+            color: var(--text-light);
+            font-size: 13px;
+        }
+
+        .trial-progress {
+            margin: 1rem 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border-light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--green-primary);
+            border-radius: 4px;
+        }
+
+        .trial-meta {
+            display: flex;
+            justify-content: space-between;
+            margin: 1rem 0;
+            font-size: 13px;
+            color: var(--text-light);
+        }
+
+        .trial-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Publications/Research Section */
+        .publications-list {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .publication-item {
+            display: flex;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: 0.3s;
+            gap: 1rem;
+        }
+
+        .publication-item:hover {
+            background: var(--bg-light);
+        }
+
+        .publication-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: rgba(255, 75, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--green-primary);
+        }
+
+        .publication-content {
+            flex: 1;
+        }
+
+        .publication-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .publication-title {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 16px;
+        }
+
+        .publication-date {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .publication-authors {
+            color: var(--text-light);
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .publication-journal {
+            color: var(--text-dark);
+            font-size: 13px;
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .publication-meta {
+            display: flex;
+            gap: 15px;
+        }
+
+        .publication-meta span {
+            font-size: 12px;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .publication-badge {
+            background: var(--green-primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Messages Section */
+        .messages-list {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .message-item {
+            display: flex;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: 0.3s;
+            gap: 1rem;
+        }
+
+        .message-item:hover {
+            background: var(--bg-light);
+        }
+
+        .message-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 75, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--green-primary);
+        }
+
+        .message-content {
+            flex: 1;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .message-sender {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+
+        .message-subject {
+            font-weight: 500;
+            color: var(--text-dark);
+            margin-bottom: 4px;
+        }
+
+        .message-preview {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .message-badge {
+            background: var(--green-primary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .quick-action-btn {
+            background: white;
+            border: 1px solid var(--border-light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .quick-action-btn:hover {
+            border-color: var(--green-primary);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(255, 75, 0, 0.1);
+        }
+
+        .quick-action-btn i {
+            width: 30px;
+            height: 30px;
+            color: var(--green-primary);
+        }
+
+        .quick-action-btn span {
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .welcome-banner h1 {
+                font-size: 24px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .appointment-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .appointment-info {
+                width: 100%;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .appointment-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .quick-actions {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .quick-actions {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">STACKLY RESEARCH</a>
+
+            <!-- Desktop Menu - 5 Nav Items -->
+            <div class="nav-menu">
+                <a href="#" class="nav-link active" onclick="showSection('dashboard'); return false;">
+                    <i data-lucide="home"></i> Dashboard
+                </a>
+                <a href="#" class="nav-link" onclick="showSection('meetings'); return false;">
+                    <i data-lucide="calendar"></i> Meetings
+                </a>
+                <a href="#" class="nav-link" onclick="showSection('papers'); return false;">
+                    <i data-lucide="file-text"></i> Research Papers
+                </a>
+                <a href="#" class="nav-link" onclick="showSection('trials'); return false;">
+                    <i data-lucide="flask"></i> Clinical Trials
+                </a>
+                <a href="#" class="nav-link" onclick="showSection('messages'); return false;">
+                    <i data-lucide="message-circle"></i> Messages
+                </a>
+                
+                <!-- Profile Dropdown -->
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="profile-btn" onclick="toggleDropdown()">
+                        <img src="hr12.webp" alt="Profile">
+                        <span id="profileEmail">stackly.smith@research.org</span>
+                        <i data-lucide="chevron-down"></i>
+                    </div>
+                    <div class="dropdown-content" id="dropdownContent">
+                        <div class="dropdown-header">
+                            <h4 id="dropdownName">satckly</h4>
+                            <p id="dropdownEmail">stackly@research.org</p>
+                        </div>
+                        <a href="4041.html" class="dropdown-item" onclick="window.location.href='404.html'">
+                            <i data-lucide="user"></i> My Profile
+                        </a>
+                        <a href="4041.html" class="dropdown-item" onclick="window.location.href='404.html'">
+                            <i data-lucide="settings"></i> Lab Settings
+                        </a>
+                        <a href="4041.html" class="dropdown-item" onclick="window.location.href='404.html'">
+                            <i data-lucide="credit-card"></i> Grants
+                        </a>
+                        <a href="index.html" class="dropdown-item" onclick="window.location.href='404.html'">
+                            <i data-lucide="log-out"></i> Back To Home 
+                        </a>
+                        <a href="login.html" class="dropdown-item" onclick="logout()">
+                            <i data-lucide="log-out"></i> Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hamburger Menu -->
+            <div class="hamburger" onclick="toggleMobileMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-nav-links">
+            <a href="4041.html" class="mobile-nav-link" onclick="showSection('dashboard'); toggleMobileMenu(); return false;">
+                <i data-lucide="home"></i> Dashboard
+            </a>
+            <a href="4041.html" class="mobile-nav-link" onclick="showSection('meetings'); toggleMobileMenu(); return false;">
+                <i data-lucide="calendar"></i> Meetings
+            </a>
+            <a href="4041.html" class="mobile-nav-link" onclick="showSection('papers'); toggleMobileMenu(); return false;">
+                <i data-lucide="file-text"></i> Research Papers
+            </a>
+            <a href="4041.html" class="mobile-nav-link" onclick="showSection('trials'); toggleMobileMenu(); return false;">
+                <i data-lucide="flask"></i> Clinical Trials
+            </a>
+            <a href="4041.html" class="mobile-nav-link" onclick="showSection('messages'); toggleMobileMenu(); return false;">
+                <i data-lucide="message-circle"></i> Messages
+            </a>
+            <div style="border-top: 1px solid var(--border-light); margin: 1rem 0;"></div>
+            <a href="4041.html" class="mobile-nav-link" onclick="window.location.href='404.html'">
+                <i data-lucide="user"></i> My Profile
+            </a>
+            <a href="4041.html" class="mobile-nav-link" onclick="window.location.href='404.html'">
+                <i data-lucide="settings"></i> Lab Settings
+            </a>
+            <a href="4041.html" class="mobile-nav-link" onclick="window.location.href='404.html'">
+                <i data-lucide="credit-card"></i> Grants
+            </a>
+            <a href="index.html" class="mobile-nav-link" onclick="window.location.href='404.html'">
+                <i data-lucide="log-out"></i> Back To Home
+            </a>
+            <a href="index.html" class="mobile-nav-link" onclick="logout()">
+                <i data-lucide="log-out"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- DASHBOARD SECTION -->
+        <div id="dashboard-section">
+           
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card" onclick="window.location.href='404.html'">
+                    <div class="stat-icon">
+                        <i data-lucide="calendar"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Upcoming Meetings</h3>
+                        <p>4</p>
+                    </div>
+                </div>
+                <div class="stat-card" onclick="window.location.href='404.html'">
+                    <div class="stat-icon">
+                        <i data-lucide="file-text"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Research Papers</h3>
+                        <p>18</p>
+                    </div>
+                </div>
+                <div class="stat-card" onclick="window.location.href='404.html'">
+                    <div class="stat-icon">
+                        <i data-lucide="flask"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Active Trials</h3>
+                        <p>6</p>
+                    </div>
+                </div>
+                <div class="stat-card" onclick="window.location.href='404.html'">
+                    <div class="stat-icon">
+                        <i data-lucide="message-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Unread Messages</h3>
+                        <p>5</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="section-title">
+                <h2>Quick Actions</h2>
+            </div>
+            <div class="quick-actions">
+                <div class="quick-action-btn" onclick="window.location.href='404.html'">
+                    <i data-lucide="calendar-plus"></i>
+                    <span>Schedule Meeting</span>
+                </div>
+                <div class="quick-action-btn" onclick="window.location.href='404.html'">
+                    <i data-lucide="video"></i>
+                    <span>Video Conference</span>
+                </div>
+                <div class="quick-action-btn" onclick="window.location.href='404.html'">
+                    <i data-lucide="upload"></i>
+                    <span>Submit Paper</span>
+                </div>
+                <div class="quick-action-btn" onclick="window.location.href='404.html'">
+                    <i data-lucide="dollar-sign"></i>
+                    <span>Grant Applications</span>
+                </div>
+            </div>
+
+            <!-- Recent Publications -->
+            <div class="section-title">
+                <h2>Recent Publications</h2>
+                <span class="view-all" onclick="window.location.href='404.html'">View All <i data-lucide="arrow-right"></i></span>
+            </div>
+            
+            <div class="publications-list">
+                <div class="publication-item" onclick="window.location.href='404.html'">
+                    <div class="publication-icon">NEJM</div>
+                    <div class="publication-content">
+                        <div class="publication-header">
+                            <span class="publication-title">Novel Biomarkers in Early Cancer Detection</span>
+                            <span class="publication-date">Mar 2026</span>
+                        </div>
+                        <div class="publication-authors">Smith J, Johnson M, et al.</div>
+                        <div class="publication-journal">New England Journal of Medicine</div>
+                        <div class="publication-meta">
+                            <span><i data-lucide="eye"></i> 2.4k views</span>
+                            <span><i data-lucide="message-square"></i> 12 citations</span>
+                            <span><i data-lucide="download"></i> 345 downloads</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="publication-item" onclick="window.location.href='404.html'">
+                    <div class="publication-icon">NC</div>
+                    <div class="publication-content">
+                        <div class="publication-header">
+                            <span class="publication-title">AI-Driven Drug Discovery Pipeline</span>
+                            <span class="publication-date">Feb 2026</span>
+                        </div>
+                        <div class="publication-authors">Smith J, Chen W, Patel R</div>
+                        <div class="publication-journal">Nature Communications</div>
+                        <div class="publication-meta">
+                            <span><i data-lucide="eye"></i> 1.8k views</span>
+                            <span><i data-lucide="message-square"></i> 8 citations</span>
+                            <span><i data-lucide="download"></i> 234 downloads</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MEETINGS SECTION (Hidden by default) -->
+        <div id="meetings-section" style="display: none;">
+            <div class="section-title">
+                <h2>Upcoming Meetings</h2>
+                <span class="view-all" onclick="window.location.href='404.html'">Schedule New <i data-lucide="plus-circle"></i></span>
+            </div>
+            
+            <div class="appointments-list">
+                <div class="appointment-item">
+                    <div class="appointment-info">
+                        <div class="appointment-date">
+                            <div class="day">16</div>
+                            <div class="month">MAR</div>
+                        </div>
+                        <div class="appointment-details">
+                            <h4>Research Team Meeting</h4>
+                            <p><i data-lucide="clock"></i> 10:00 AM - Cancer Research Group</p>
+                            <p><i data-lucide="map-pin"></i> Conference Room A / Zoom</p>
+                            <p><i data-lucide="users"></i> 8 attendees</p>
+                        </div>
+                    </div>
+                    <div class="appointment-actions">
+                        <span class="appointment-status status-confirmed">Confirmed</span>
+                        <button class="appointment-btn btn-primary" onclick="window.location.href='404.html'">Join</button>
+                        <button class="appointment-btn btn-outline" onclick="window.location.href='404.html'">Reschedule</button>
+                    </div>
+                </div>
+                
+                <div class="appointment-item">
+                    <div class="appointment-info">
+                        <div class="appointment-date">
+                            <div class="day">18</div>
+                            <div class="month">MAR</div>
+                        </div>
+                        <div class="appointment-details">
+                            <h4>Grant Review Committee</h4>
+                            <p><i data-lucide="clock"></i> 2:00 PM - NIH Grant Review</p>
+                            <p><i data-lucide="video"></i> Video Conference</p>
+                            <p><i data-lucide="users"></i> 5 committee members</p>
+                        </div>
+                    </div>
+                    <div class="appointment-actions">
+                        <span class="appointment-status status-pending">Pending</span>
+                        <button class="appointment-btn btn-primary" onclick="window.location.href='404.html'">Accept</button>
+                        <button class="appointment-btn btn-outline" onclick="window.location.href='404.html'">Decline</button>
+                    </div>
+                </div>
+                
+                <div class="appointment-item">
+                    <div class="appointment-info">
+                        <div class="appointment-date">
+                            <div class="day">22</div>
+                            <div class="month">MAR</div>
+                        </div>
+                        <div class="appointment-details">
+                            <h4>Collaboration with BioTech Corp</h4>
+                            <p><i data-lucide="clock"></i> 11:00 AM - Drug Development</p>
+                            <p><i data-lucide="video"></i> Video Conference</p>
+                            <p><i data-lucide="users"></i> 3 external partners</p>
+                        </div>
+                    </div>
+                    <div class="appointment-actions">
+                        <span class="appointment-status status-confirmed">Confirmed</span>
+                        <button class="appointment-btn btn-primary" onclick="window.location.href='404.html'">Join</button>
+                        <button class="appointment-btn btn-outline" onclick="window.location.href='404.html'">Details</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-title">
+                <h2>Past Meetings</h2>
+                <span class="view-all" onclick="window.location.href='404.html'">View All <i data-lucide="arrow-right"></i></span>
+            </div>
+            
+            <div class="appointments-list">
+                <div class="appointment-item" onclick="window.location.href='404.html'">
+                    <div class="appointment-info">
+                        <div class="appointment-date">
+                            <div class="day">10</div>
+                            <div class="month">MAR</div>
+                        </div>
+                        <div class="appointment-details">
+                            <h4>Lab Progress Meeting</h4>
+                            <p>Monthly research update</p>
+                        </div>
+                    </div>
+                    <button class="appointment-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">View Minutes</button>
+                </div>
+                <div class="appointment-item" onclick="window.location.href='404.html'">
+                    <div class="appointment-info">
+                        <div class="appointment-date">
+                            <div class="day">5</div>
+                            <div class="month">MAR</div>
+                        </div>
+                        <div class="appointment-details">
+                            <h4>Ethics Committee</h4>
+                            <p>Protocol review</p>
+                        </div>
+                    </div>
+                    <button class="appointment-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">View Summary</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESEARCH PAPERS SECTION (Hidden by default) -->
+        <div id="papers-section" style="display: none;">
+            <div class="section-title">
+                <h2>Research Papers</h2>
+                <span class="view-all" onclick="window.location.href='404.html'">Submit New <i data-lucide="upload"></i></span>
+            </div>
+            
+            <div class="records-grid">
+                <div class="record-card" onclick="window.location.href='404.html'">
+                    <div class="record-header">
+                        <div class="record-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <div class="record-title">
+                            <h3>Novel Biomarkers in Early Cancer Detection</h3>
+                            <p>Submitted: Mar 10, 2026</p>
+                        </div>
+                    </div>
+                    <div class="record-details">
+                        <div class="record-detail">
+                            <span>Journal</span>
+                            <span>NEJM</span>
+                        </div>
+                        <div class="record-detail">
+                            <span>Status</span>
+                            <span>Under Review</span>
+                        </div>
+                        <div class="record-detail">
+                            <span>Co-authors</span>
+                            <span>Johnson, Williams</span>
+                        </div>
+                    </div>
+                    <div class="record-actions">
+                        <button class="record-btn btn-primary" onclick="event.stopPropagation(); window.location.href='404.html'">View</button>
+                        <button class="record-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">Download</button>
+                        <button class="record-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">Share</button>
+                    </div>
+                </div>
+
+                <div class="record-card" onclick="window.location.href='404.html'">
+                    <div class="record-header">
+                        <div class="record-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <div class="record-title">
+                            <h3>AI-Driven Drug Discovery Pipeline</h3>
+                            <p>Published: Feb 28, 2026</p>
+                        </div>
+                    </div>
+                    <div class="record-details">
+                        <div class="record-detail">
+                            <span>Journal</span>
+                            <span>Nature Communications</span>
+                        </div>
+                        <div class="record-detail">
+                            <span>Status</span>
+                            <span>Published</span>
+                        </div>
+                        <div class="record-detail">
+                            <span>Citations</span>
+                            <span>8</span>
+                        </div>
+                    </div>
+                    <div class="record-actions">
+                        <button class="record-btn btn-primary" onclick="event.stopPropagation(); window.location.href='404.html'">View</button>
+                        <button class="record-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">PDF</button>
+                        <button class="record-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">Cite</button>
+                    </div>
+                </div>
+
+                <div class="record-card" onclick="window.location.href='404.html'">
+                    <div class="record-header">
+                        <div class="record-icon">
+                            <i data-lucide="file-text"></i>
+                        </div>
+                        <div class="record-title">
+                            <h3>Patient Outcomes in Immunotherapy</h3>
+                            <p>Draft: Mar 5, 2026</p>
+                        </div>
+                    </div>
+                    <div class="record-details">
+                        <div class="record-detail">
+                            <span>Target Journal</span>
+                            <span>Lancet Oncology</span>
+                        </div>
+                        <div class="record-detail">
+                            <span>Status</span>
+                            <span>In Progress</span>
+                        </div>
+                        <div class="record-detail">
+                            <span>Completion</span>
+                            <span>75%</span>
+                        </div>
+                    </div>
+                    <div class="record-actions">
+                        <button class="record-btn btn-primary" onclick="event.stopPropagation(); window.location.href='404.html'">Edit</button>
+                        <button class="record-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">Preview</button>
+                        <button class="record-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">Share</button>
+                    </div>
+                </div>
+
+                <div class="record-card" onclick="window.location.href='404.html'">
+                    <div class="record-header">
+                        <div class="record-icon">
+                            <i data-lucide="activity"></i>
+                        </div>
+                        <div class="record-title">
+                            <h3>Clinical Trial Phase 2 Results</h3>
+                            <p>Data Analysis: Mar 12, 2026</p>
+                        </div>
+                    </div>
+                    <div class="record-details">
+                        <div class="record-detail">
+                            <span>Trial ID</span>
+                            <span>CT-2024-089</span>
+                        </div>
+                        <div class="record-detail">
+                            <span>Status</span>
+                            <span>Analysis Phase</span>
+                        </div>
+                        <div class="record-detail">
+                            <span>Participants</span>
+                            <span>245</span>
+                        </div>
+                    </div>
+                    <div class="record-actions">
+                        <button class="record-btn btn-primary" onclick="event.stopPropagation(); window.location.href='404.html'">View Data</button>
+                        <button class="record-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">Export</button>
+                        <button class="record-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">Analyze</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLINICAL TRIALS SECTION (Hidden by default) -->
+        <div id="trials-section" style="display: none;">
+            <div class="section-title">
+                <h2>Active Clinical Trials</h2>
+                <span class="view-all" onclick="window.location.href='404.html'">Start New Trial <i data-lucide="plus-circle"></i></span>
+            </div>
+            
+            <div class="trials-grid">
+                <div class="trial-card" onclick="window.location.href='404.html'">
+                    <div class="trial-header">
+                        <div class="trial-icon">
+                            <i data-lucide="flask"></i>
+                        </div>
+                        <div class="trial-info">
+                            <h3>Cancer Immunotherapy</h3>
+                            <p>Phase 3 · CT-2025-001</p>
+                        </div>
+                    </div>
+                    <div class="trial-progress">
+                        <div class="progress-label">
+                            <span>Recruitment</span>
+                            <span>324/400 patients</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 81%;"></div>
+                        </div>
+                    </div>
+                    <div class="trial-meta">
+                        <span><i data-lucide="calendar"></i> Est. completion: Dec 2026</span>
+                        <span><i data-lucide="users"></i> 12 sites</span>
+                    </div>
+                    <div class="record-actions" style="margin-top: 1rem;">
+                        <button class="record-btn btn-primary" onclick="event.stopPropagation(); window.location.href='404.html'">Dashboard</button>
+                        <button class="record-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">Data</button>
+                    </div>
+                </div>
+
+                <div class="trial-card" onclick="window.location.href='404.html'">
+                    <div class="trial-header">
+                        <div class="trial-icon">
+                            <i data-lucide="flask"></i>
+                        </div>
+                        <div class="trial-info">
+                            <h3>Alzheimer's Prevention</h3>
+                            <p>Phase 2 · CT-2025-045</p>
+                        </div>
+                    </div>
+                    <div class="trial-progress">
+                        <div class="progress-label">
+                            <span>Recruitment</span>
+                            <span>156/300 patients</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 52%;"></div>
+                        </div>
+                    </div>
+                    <div class="trial-meta">
+                        <span><i data-lucide="calendar"></i> Est. completion: Jun 2027</span>
+                        <span><i data-lucide="users"></i> 8 sites</span>
+                    </div>
+                    <div class="record-actions" style="margin-top: 1rem;">
+                        <button class="record-btn btn-primary" onclick="event.stopPropagation(); window.location.href='404.html'">Dashboard</button>
+                        <button class="record-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">Data</button>
+                    </div>
+                </div>
+
+                <div class="trial-card" onclick="window.location.href='404.html'">
+                    <div class="trial-header">
+                        <div class="trial-icon">
+                            <i data-lucide="flask"></i>
+                        </div>
+                        <div class="trial-info">
+                            <h3>Diabetes Management</h3>
+                            <p>Phase 4 · CT-2024-112</p>
+                        </div>
+                    </div>
+                    <div class="trial-progress">
+                        <div class="progress-label">
+                            <span>Follow-up</span>
+                            <span>412/500 patients</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 82%;"></div>
+                        </div>
+                    </div>
+                    <div class="trial-meta">
+                        <span><i data-lucide="calendar"></i> Est. completion: Mar 2026</span>
+                        <span><i data-lucide="users"></i> 15 sites</span>
+                    </div>
+                    <div class="record-actions" style="margin-top: 1rem;">
+                        <button class="record-btn btn-primary" onclick="event.stopPropagation(); window.location.href='404.html'">Dashboard</button>
+                        <button class="record-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">Analysis</button>
+                    </div>
+                </div>
+
+                <div class="trial-card" onclick="window.location.href='404.html'">
+                    <div class="trial-header">
+                        <div class="trial-icon">
+                            <i data-lucide="flask"></i>
+                        </div>
+                        <div class="trial-info">
+                            <h3>Cardiovascular Drug</h3>
+                            <p>Phase 1 · CT-2026-003</p>
+                        </div>
+                    </div>
+                    <div class="trial-progress">
+                        <div class="progress-label">
+                            <span>Recruitment</span>
+                            <span>24/50 patients</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 48%;"></div>
+                        </div>
+                    </div>
+                    <div class="trial-meta">
+                        <span><i data-lucide="calendar"></i> Est. completion: Sep 2026</span>
+                        <span><i data-lucide="users"></i> 3 sites</span>
+                    </div>
+                    <div class="record-actions" style="margin-top: 1rem;">
+                        <button class="record-btn btn-primary" onclick="event.stopPropagation(); window.location.href='404.html'">Dashboard</button>
+                        <button class="record-btn btn-outline" onclick="event.stopPropagation(); window.location.href='404.html'">Protocol</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MESSAGES SECTION (Hidden by default) -->
+        <div id="messages-section" style="display: none;">
+            <div class="section-title">
+                <h2>Messages</h2>
+                <span class="view-all" onclick="window.location.href='404.html'">Compose New <i data-lucide="edit"></i></span>
+            </div>
+            
+            <div class="messages-list">
+                <div class="message-item" onclick="window.location.href='404.html'">
+                    <div class="message-avatar">MW</div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-sender">Dr. Michael Wilson</span>
+                            <span class="message-time">1 hour ago</span>
+                        </div>
+                        <div class="message-subject">
+                            Collaboration Proposal
+                            <span class="message-badge" style="margin-left: 10px;">New</span>
+                        </div>
+                        <div class="message-preview">
+                            I'd like to discuss potential collaboration on the cancer immunotherapy trial...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message-item" onclick="window.location.href='404.html'">
+                    <div class="message-avatar">RC</div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-sender">Review Committee</span>
+                            <span class="message-time">Yesterday</span>
+                        </div>
+                        <div class="message-subject">
+                            Grant Application Update
+                        </div>
+                        <div class="message-preview">
+                            Your grant application #NIH-2026-089 has passed initial review...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message-item" onclick="window.location.href='404.html'">
+                    <div class="message-avatar">LB</div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-sender">Lab Manager</span>
+                            <span class="message-time">3 days ago</span>
+                        </div>
+                        <div class="message-subject">
+                            Equipment Maintenance
+                        </div>
+                        <div class="message-preview">
+                            The MRI scanner will be down for maintenance on March 20th...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="message-item" onclick="window.location.href='404.html'">
+                    <div class="message-avatar">NC</div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-sender">Nature Communications</span>
+                            <span class="message-time">5 days ago</span>
+                        </div>
+                        <div class="message-subject">
+                            Paper Submission Confirmation
+                        </div>
+                        <div class="message-preview">
+                            Thank you for submitting your manuscript to Nature Communications...
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="appointment-btn btn-primary" onclick="window.location.href='4041.html'" style="padding: 12px 40px;">View All Messages</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // Load user data from localStorage
+        function loadUserData() {
+            const userData = JSON.parse(localStorage.getItem('user'));
+            if (userData) {
+                const userName = userData.name || 'user';
+                const userEmail = userData.email || 'stackly@research.org';
+                
+                // Update all profile displays
+                document.getElementById('profileEmail').textContent = userEmail;
+                document.getElementById('dropdownName').textContent = userName;
+                document.getElementById('dropdownEmail').textContent = userEmail;
+                document.getElementById('welcomeName').textContent = userName;
+                document.getElementById('welcomeEmail').textContent = userEmail;
+            }
+        }
+
+        // Show selected section
+        function showSection(section) {
+            // Hide all sections
+            document.getElementById('dashboard-section').style.display = 'none';
+            document.getElementById('meetings-section').style.display = 'none';
+            document.getElementById('papers-section').style.display = 'none';
+            document.getElementById('trials-section').style.display = 'none';
+            document.getElementById('messages-section').style.display = 'none';
+            
+            // Show selected section
+            document.getElementById(section + '-section').style.display = 'block';
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Find and activate the clicked link
+            const navLinks = document.querySelectorAll('.nav-link');
+            if (section === 'dashboard') navLinks[0].classList.add('active');
+            else if (section === 'meetings') navLinks[1].classList.add('active');
+            else if (section === 'papers') navLinks[2].classList.add('active');
+            else if (section === 'trials') navLinks[3].classList.add('active');
+            else if (section === 'messages') navLinks[4].classList.add('active');
+            
+            // Recreate icons for new content
+            lucide.createIcons();
+        }
+
+        // Toggle dropdown
+        function toggleDropdown() {
+            document.getElementById('dropdownContent').classList.toggle('show');
+        }
+
+        // Toggle mobile menu
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+            const hamburger = document.querySelector('.hamburger');
+            hamburger.classList.toggle('active');
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+
+        // Close dropdown when clicking outside
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-dropdown')) {
+                document.getElementById('dropdownContent')?.classList.remove('show');
+            }
+        }
+
+        // Load user data on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadUserData();
+            lucide.createIcons();
+            
+            // Show dashboard by default
+            showSection('dashboard');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,2813 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stackly</title>
+
+<style>
+
+/* ===== RESET ===== */
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI, sans-serif;
+}
+
+/* ===== PAGE LOADER ===== */
+#page-loader{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100vh;
+background:#0b1220;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+z-index:9999;
+}
+
+/* DNA LOADER */
+.dna-loader{
+position:relative;
+width:120px;
+height:120px;
+}
+
+.dna-loader span{
+position:absolute;
+width:12px;
+height:12px;
+background:#ff4b00;
+border-radius:50%;
+animation:dna 1.6s linear infinite;
+}
+
+.dna-loader span:nth-child(1){top:0;left:50%;animation-delay:0s;}
+.dna-loader span:nth-child(2){top:20px;left:80%;animation-delay:.1s;}
+.dna-loader span:nth-child(3){top:50px;left:100%;animation-delay:.2s;}
+.dna-loader span:nth-child(4){top:80px;left:80%;animation-delay:.3s;}
+.dna-loader span:nth-child(5){top:100px;left:50%;animation-delay:.4s;}
+.dna-loader span:nth-child(6){top:80px;left:20%;animation-delay:.5s;}
+.dna-loader span:nth-child(7){top:50px;left:0%;animation-delay:.6s;}
+.dna-loader span:nth-child(8){top:20px;left:20%;animation-delay:.7s;}
+
+@keyframes dna{
+0%{transform:scale(.6);opacity:.3;}
+50%{transform:scale(1.4);opacity:1;background:#ff4b00;}
+100%{transform:scale(.6);opacity:.3;}
+}
+
+.loader-text{
+color:white;
+margin-top:20px;
+font-size:18px;
+letter-spacing:2px;
+}
+
+/* ===== NAVBAR ===== */
+.navbar{
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 40px;
+height:70px;
+background:#0b1220;
+color:#fff;
+position:sticky;
+top:0;
+z-index:1000;
+}
+
+/* LOGO */
+.logo img{
+width:180px;
+height:100px;
+}
+
+/* DESKTOP LINKS */
+.nav-links{
+display:flex;
+gap:30px;
+}
+
+.nav-links a{
+color:#cfd3dc;
+text-decoration:none;
+font-size:16px;
+transition:.3s;
+}
+
+.nav-links a:hover{
+color:white;
+}
+
+/* BUTTONS */
+.nav-buttons{
+display:flex;
+gap:12px;
+}
+
+.login{
+background:transparent;
+border:1px solid #aaa;
+color:white;
+padding:8px 16px;
+border-radius:6px;
+cursor:pointer;
+}
+
+.start{
+background:#3b5cff;
+border:none;
+color:white;
+padding:9px 18px;
+border-radius:6px;
+cursor:pointer;
+font-weight:600;
+}
+
+/* HAMBURGER */
+.hamburger{
+display:none;
+flex-direction:column;
+gap:5px;
+cursor:pointer;
+}
+
+.hamburger span{
+width:26px;
+height:3px;
+background:white;
+display:block;
+}
+
+/* MOBILE MENU */
+.mobile-menu{
+position:fixed;
+top:0;
+right:-100%;
+width:100%;
+height:100vh;
+background:#0b1220;
+padding:25px 22px;
+transition:0.4s ease;
+z-index:2000;
+overflow-y:auto;
+}
+
+.mobile-menu.active{
+right:0;
+}
+
+.mobile-top{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:20px;
+}
+
+.close{
+background:none;
+border:none;
+color:white;
+font-size:24px;
+cursor:pointer;
+}
+
+.mobile-buttons{
+display:flex;
+gap:10px;
+margin-bottom:25px;
+}
+
+.mobile-links a{
+display:block;
+padding:14px 0;
+border-bottom:1px solid #1f2a44;
+color:#cfd3dc;
+text-decoration:none;
+font-size:16px;
+}
+
+/* OVERLAY */
+.overlay{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.55);
+opacity:0;
+visibility:hidden;
+transition:.3s;
+z-index:1500;
+}
+
+.overlay.active{
+opacity:1;
+visibility:visible;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+
+.nav-links,
+.nav-buttons{
+display:none;
+}
+
+.hamburger{
+display:flex;
+}
+
+.navbar{
+padding:14px 20px;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+
+<div class="dna-loader">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+
+<div class="loader-text">Loading Biotechnology...</div>
+
+</div>
+
+<!-- NAVBAR -->
+<header class="navbar">
+
+<div class="logo">
+<img src="stacklylogo (1).webp">
+</div>
+
+<nav class="nav-links">
+<a href="index.html">Home</a>
+<a href="features.html">Features</a>
+<a href="services.html">Services</a>
+<a href="about.html">About</a>
+<a href="blog.html">Blog</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+<div class="nav-buttons">
+<a href="login.html"><button class="login">Login</button></a>
+<a href="getstarted.html"><button class="start">Get Started</button></a>
+</div>
+
+<div class="hamburger" id="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</div>
+
+</header>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+
+<div class="mobile-top">
+<div class="logo"><img src="stacklylogo (1).webp" height="35"></div>
+<button class="close" id="closeMenu">✕</button>
+</div>
+
+<div class="mobile-buttons">
+<a href="login.html"><button class="login">Login</button></a>
+<a href="getstarted.html"><button class="start">Get Started</button></a>
+</div>
+
+<nav class="mobile-links">
+<a href="index.html">Home</a>
+<a href="features.html">Features</a>
+<a href="services.html">Services</a>
+<a href="about.html">About</a>
+<a href="blog.html">Blog</a>
+<a href="contact.html">Contact</a>
+</nav>
+
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<script>
+
+/* PAGE LOADER */
+window.addEventListener("load", function(){
+setTimeout(function(){
+document.getElementById("page-loader").style.display="none";
+},2000);
+});
+
+/* MENU */
+const hamburger = document.getElementById("hamburger");
+const mobileMenu = document.getElementById("mobileMenu");
+const closeMenu = document.getElementById("closeMenu");
+const overlay = document.getElementById("overlay");
+
+hamburger.onclick = () => {
+mobileMenu.classList.add("active");
+overlay.classList.add("active");
+}
+
+closeMenu.onclick = () => {
+mobileMenu.classList.remove("active");
+overlay.classList.remove("active");
+}
+
+overlay.onclick = () => {
+mobileMenu.classList.remove("active");
+overlay.classList.remove("active");
+}
+
+</script>
+
+</body>
+</html>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Segoe UI;
+}
+
+body{
+background:#000;
+color:white;
+overflow-x:hidden;
+}
+
+/* HERO */
+
+.hero{
+position:relative;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+overflow:hidden;
+}
+
+.hero video{
+position:absolute;
+width:100%;
+height:100%;
+object-fit:cover;
+z-index:-2;
+}
+
+.overlay{
+position:absolute;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.55);
+z-index:-1;
+}
+
+.hero-container{
+width:90%;
+max-width:1300px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:50px;
+}
+
+/* TEXT */
+
+.hero-text{
+max-width:600px;
+}
+
+.hero-text h1{
+font-size:60px;
+margin-bottom:20px;
+}
+
+.hero-text p{
+font-size:18px;
+color:white;
+margin-bottom:30px;
+}
+
+.hero-btn{
+padding:14px 30px;
+border:1px solid white;
+background:transparent;
+color:white;
+cursor:pointer;
+}
+
+.hero-btn:hover{
+background:white;
+color:black;
+}
+
+/* VIDEO CONTROL */
+
+.video-btn{
+position:absolute;
+top:20px;
+right:20px;
+background:rgba(0,0,0,0.6);
+border:none;
+color:#ff5c00;
+font-size:18px;
+padding:10px 14px;
+cursor:pointer;
+}
+
+/* CHATBOT */
+
+.chatbot{
+position:fixed;
+bottom:100px;
+right:30px;
+width:330px;
+background:rgba(255,255,255,0.06);
+backdrop-filter:blur(14px);
+border:1px solid rgba(255,255,255,0.15);
+border-radius:12px;
+overflow:hidden;
+display:none;
+}
+
+.chat-header{
+background:#ff5c00;
+padding:12px;
+font-weight:bold;
+}
+
+.chat-body{
+height:240px;
+overflow-y:auto;
+padding:12px;
+font-size:14px;
+}
+
+.bot{
+color:#00ffd5;
+margin-bottom:10px;
+}
+
+.user{
+text-align:right;
+margin-bottom:10px;
+}
+
+.chat-input{
+display:flex;
+border-top:1px solid rgba(255,255,255,0.2);
+}
+
+.chat-input input{
+flex:1;
+border:none;
+background:transparent;
+color:white;
+padding:10px;
+outline:none;
+}
+
+.chat-input button{
+background:#ff5c00;
+border:none;
+padding:10px 14px;
+color:white;
+cursor:pointer;
+}
+
+/* BOT ICON */
+
+.bot-icon{
+position:fixed;
+bottom:30px;
+right:30px;
+width:60px;
+height:60px;
+border-radius:50%;
+background:#ff5c00;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:26px;
+cursor:pointer;
+box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* SCROLL BUTTON */
+
+.scroll-top{
+position:fixed;
+bottom:30px;
+left:30px;
+background:#ff5c00;
+border:none;
+padding:12px 16px;
+font-size:18px;
+color:white;
+cursor:pointer;
+display:none;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.hero-container{
+flex-direction:column;
+text-align:center;
+}
+
+.hero-text h1{
+font-size:34px;
+}
+
+.chatbot{
+right:10px;
+width:90%;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<section class="hero" id="hero">
+
+<video autoplay muted loop id="heroVideo">
+<source src="324079_medium.mp4">
+</video>
+
+<div class="overlay"></div>
+
+<button class="video-btn" onclick="toggleVideo()" id="videoBtn">⏸</button>
+
+<div class="hero-container">
+
+<div class="hero-text">
+
+<h1>Stackly Bio Technology</h1>
+
+<p>
+AI powered biotechnology platform transforming research,
+genomics and healthcare innovation.
+</p>
+
+<a href="404.html">
+<button class="hero-btn">Explore now →</button>
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- CHATBOT -->
+
+
+<script>
+
+/* VIDEO CONTROL */
+
+function toggleVideo(){
+
+let video=document.getElementById("heroVideo");
+let btn=document.getElementById("videoBtn");
+
+if(video.paused){
+video.play();
+btn.innerHTML="⏸";
+}else{
+video.pause();
+btn.innerHTML="▶";
+}
+
+}
+
+/* BOT OPEN CLOSE */
+
+function toggleBot(){
+
+let bot=document.getElementById("chatbot");
+
+if(bot.style.display==="block"){
+bot.style.display="none";
+}else{
+bot.style.display="block";
+}
+
+}
+
+/* CHATBOT DATA */
+
+const answers={
+
+"dna":"DNA carries genetic instructions used in growth and reproduction.",
+
+"crispr":"CRISPR is a gene editing technology used in biotechnology.",
+
+"biotechnology":"Biotechnology combines biology and technology to develop medicines and vaccines.",
+
+"stackly":"Stackly Bio Technology builds AI driven biotech platforms.",
+
+"default":"Ask about DNA, CRISPR, biotechnology or Stackly."
+
+};
+
+/* SEND MESSAGE */
+
+function send(){
+
+let input=document.getElementById("chatInput");
+let text=input.value.toLowerCase();
+
+let chat=document.getElementById("chatBody");
+
+chat.innerHTML+=`<div class="user">${text}</div>`;
+
+let reply=answers[text] || answers["default"];
+
+setTimeout(()=>{
+
+chat.innerHTML+=`<div class="bot">${reply}</div>`;
+chat.scrollTop=chat.scrollHeight;
+
+},500);
+
+input.value="";
+
+}
+
+/* SCROLL BUTTON */
+
+window.onscroll=function(){
+
+let btn=document.querySelector(".scroll-top");
+
+if(document.documentElement.scrollTop>400){
+btn.style.display="block";
+}else{
+btn.style.display="none";
+}
+
+}
+
+/* SCROLL HERO */
+
+function scrollHero(){
+
+document.getElementById("hero").scrollIntoView({
+behavior:"smooth"
+});
+
+}
+
+</script>
+
+</body>
+</html>
+
+
+<title>Stackly Bio Technology</title>
+
+<style>
+
+/* RESET */
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: "Segoe UI", Arial, sans-serif;
+}
+
+body{
+background:#f5f5f5;
+}
+
+/* SECTION */
+
+.future-section{
+padding:120px 8%;
+}
+
+.future-container{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:60px;
+max-width:1300px;
+margin:auto;
+}
+
+/* TEXT */
+
+.future-text{
+flex:1;
+}
+
+.future-text h2{
+font-size:48px;
+line-height:1.2;
+margin-bottom:25px;
+color:#000;
+}
+
+.future-text p{
+font-size:17px;
+color:#444;
+line-height:1.7;
+max-width:520px;
+margin-bottom:35px;
+}
+
+/* BUTTON */
+
+.future-btn{
+display:inline-flex;
+align-items:center;
+gap:10px;
+border:1px solid #000;
+padding:14px 26px;
+text-decoration:none;
+color:#000;
+font-size:16px;
+transition:0.3s;
+}
+
+.future-btn span{
+font-size:20px;
+transition:0.3s;
+}
+
+.future-btn:hover{
+background:#000;
+color:#fff;
+}
+
+.future-btn:hover span{
+transform:translateX(5px);
+}
+
+/* IMAGE */
+
+.future-image{
+flex:1;
+}
+
+.future-image img{
+width:100%;
+border-radius:6px;
+}
+
+/* SCROLL REVEAL */
+
+.reveal{
+opacity:0;
+transform:translateY(80px);
+transition:all 1s ease;
+}
+
+.reveal.active{
+opacity:1;
+transform:translateY(0);
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+.future-container{
+flex-direction:column;
+text-align:center;
+}
+
+.future-text h2{
+font-size:32px;
+}
+
+.future-text p{
+margin:auto;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<section class="future-section reveal">
+
+<div class="future-container">
+
+<!-- LEFT CONTENT -->
+
+<div class="future-text">
+
+<h2>
+Stackly Bio Technology looks ahead to the future so you can innovate today
+</h2>
+
+<p>
+Artificial Intelligence and biotechnology are transforming the global
+healthcare ecosystem. Stackly Bio Technology empowers organizations
+with advanced research platforms, genomic insights, and AI-driven
+medical innovations to build the next generation of healthcare solutions.
+</p>
+
+<a href="404.html" class="future-btn">
+Learn more <span>→</span>
+</a>
+
+</div>
+
+<!-- RIGHT IMAGE -->
+
+<div class="future-image">
+
+<img src="bio12.webp" alt="AI Robotics">
+
+</div>
+
+</div>
+
+</section>
+
+<script>
+
+/* SCROLL REVEAL */
+
+function reveal(){
+
+let reveals=document.querySelectorAll(".reveal");
+
+for(let i=0;i<reveals.length;i++){
+
+let windowHeight=window.innerHeight;
+let elementTop=reveals[i].getBoundingClientRect().top;
+let elementVisible=120;
+
+if(elementTop < windowHeight - elementVisible){
+
+reveals[i].classList.add("active");
+
+}
+
+}
+
+}
+
+window.addEventListener("scroll",reveal);
+
+</script>
+
+</body>
+</html>
+<section class="stats-section">
+
+<div class="stats-heading reveal">
+<h2>Stackly Bio Impact</h2>
+<p>Powering the future of biotechnology with AI-driven research platforms</p>
+</div>
+
+<div class="stats-grid">
+
+<div class="stat-card reveal">
+<div class="icon">🧬</div>
+<h3 class="counter" data-target="10000">0</h3>
+<p>Genetic Sequences</p>
+</div>
+
+<div class="stat-card reveal">
+<div class="icon">🔬</div>
+<h3 class="counter" data-target="500">0</h3>
+<p>Research Projects</p>
+</div>
+
+<div class="stat-card reveal">
+<div class="icon">👩‍🔬</div>
+<h3 class="counter" data-target="1000">0</h3>
+<p>Researchers</p>
+</div>
+
+<div class="stat-card reveal">
+<div class="icon">📈</div>
+<h3 class="counter" data-target="97">0</h3>
+<p>AI Accuracy (%)</p>
+</div>
+
+</div>
+
+</section>
+
+
+<style>
+
+/* SECTION */
+
+.stats-section{
+padding:100px 20px;
+background:#fff;
+max-width:1200px;
+margin:auto;
+}
+
+/* HEADING */
+
+.stats-heading{
+text-align:center;
+margin-bottom:60px;
+}
+
+.stats-heading h2{
+font-size:38px;
+color:#ff4b00;
+margin-bottom:10px;
+}
+
+.stats-heading p{
+font-size:18px;
+color:#333;
+}
+
+/* GRID */
+
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:30px;
+}
+
+/* CARD */
+
+.stat-card{
+
+background:#fff;
+border-radius:16px;
+padding:35px 20px;
+text-align:center;
+
+border:2px solid #000;
+
+transition:.3s;
+box-shadow:0 12px 20px rgba(0,0,0,0.1);
+
+}
+
+/* ICON */
+
+.icon{
+font-size:34px;
+margin-bottom:10px;
+color:#ff4b00;
+}
+
+/* NUMBER */
+
+.stat-card h3{
+font-size:34px;
+margin-bottom:5px;
+color:#000;
+}
+
+/* TEXT */
+
+.stat-card p{
+color:#555;
+}
+
+/* HOVER */
+
+.stat-card:hover{
+transform:translateY(-8px);
+border-color:#ff4b00;
+box-shadow:0 18px 30px rgba(255,75,0,0.25);
+}
+
+/* SCROLL REVEAL */
+
+.reveal{
+opacity:0;
+transform:translateY(50px);
+transition:1s;
+}
+
+.reveal.active{
+opacity:1;
+transform:translateY(0);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.stats-heading h2{
+font-size:30px;
+}
+
+}
+
+</style>
+
+
+<script>
+
+/* COUNTER */
+
+const counters=document.querySelectorAll(".counter");
+
+const speed=120;
+
+counters.forEach(counter=>{
+
+const update=()=>{
+
+const target=+counter.getAttribute("data-target");
+
+const count=+counter.innerText;
+
+const increment=target/speed;
+
+if(count<target){
+
+counter.innerText=Math.ceil(count+increment);
+
+setTimeout(update,20);
+
+}
+
+else{
+
+counter.innerText=target.toLocaleString()+"+";
+
+}
+
+};
+
+update();
+
+});
+
+
+/* SCROLL REVEAL */
+
+function reveal(){
+
+let reveals=document.querySelectorAll(".reveal");
+
+for(let i=0;i<reveals.length;i++){
+
+let windowHeight=window.innerHeight;
+let elementTop=reveals[i].getBoundingClientRect().top;
+let elementVisible=120;
+
+if(elementTop<windowHeight-elementVisible){
+
+reveals[i].classList.add("active");
+
+}
+
+}
+
+}
+
+window.addEventListener("scroll",reveal);
+
+</script>
+
+<style>
+
+/* UNIQUE SECTION */
+
+#stacklyBioFutureSection2026{
+padding:120px 8%;
+background:black;
+}
+
+/* ROW STYLE */
+
+#stacklyBioRow1,
+#stacklyBioRow2,
+#stacklyBioRow3,
+#stacklyBioRow4,
+#stacklyBioRow5,
+#stacklyBioRow6{
+display:grid;
+grid-template-columns:320px 1fr 80px;
+align-items:center;
+gap:40px;
+margin-bottom:90px;
+cursor:pointer;
+}
+
+/* IMAGE */
+
+#stacklyBioRow1 img,
+#stacklyBioRow2 img,
+#stacklyBioRow3 img,
+#stacklyBioRow4 img,
+#stacklyBioRow5 img,
+#stacklyBioRow6 img{
+width:100%;
+height:180px;
+object-fit:cover;
+}
+
+/* TEXT */
+
+#stacklyBioRow1 h2,
+#stacklyBioRow2 h2,
+#stacklyBioRow3 h2,
+#stacklyBioRow4 h2,
+#stacklyBioRow5 h2,
+#stacklyBioRow6 h2{
+font-size:44px;
+margin-bottom:12px;
+}
+
+#stacklyBioRow1 p,
+#stacklyBioRow2 p,
+#stacklyBioRow3 p,
+#stacklyBioRow4 p,
+#stacklyBioRow5 p,
+#stacklyBioRow6 p{
+font-size:16px;
+line-height:1.6;
+color:white;
+max-width:560px;
+}
+
+/* ARROW */
+
+#stacklyBioArrow1,
+#stacklyBioArrow2,
+#stacklyBioArrow3,
+#stacklyBioArrow4,
+#stacklyBioArrow5,
+#stacklyBioArrow6{
+font-size:46px;
+color:#ff4b00;
+text-align:right;
+transition:0.3s;
+}
+
+/* HOVER */
+
+#stacklyBioRow1:hover #stacklyBioArrow1,
+#stacklyBioRow2:hover #stacklyBioArrow2,
+#stacklyBioRow3:hover #stacklyBioArrow3,
+#stacklyBioRow4:hover #stacklyBioArrow4,
+#stacklyBioRow5:hover #stacklyBioArrow5,
+#stacklyBioRow6:hover #stacklyBioArrow6{
+transform:translateX(10px);
+}
+
+/* SCROLL REVEAL */
+
+.stacklyBioReveal{
+opacity:0;
+transform:translateY(60px);
+transition:1s ease;
+}
+
+.stacklyBioReveal.active{
+opacity:1;
+transform:translateY(0);
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+#stacklyBioRow1,
+#stacklyBioRow2,
+#stacklyBioRow3,
+#stacklyBioRow4,
+#stacklyBioRow5,
+#stacklyBioRow6{
+grid-template-columns:1fr;
+text-align:center;
+}
+
+#stacklyBioArrow1,
+#stacklyBioArrow2,
+#stacklyBioArrow3,
+#stacklyBioArrow4,
+#stacklyBioArrow5,
+#stacklyBioArrow6{
+text-align:center;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<section id="stacklyBioFutureSection2026">
+
+<!-- ROW 1 -->
+
+<a href="404.html" style="text-decoration:none;color:inherit">
+<div id="stacklyBioRow1" class="stacklyBioReveal">
+
+<img src="bio1.webp">
+
+<div>
+<h2>AI Tailored for Bio Research</h2>
+<p>AI systems built for biotechnology accelerate genomic analysis, medical discovery and precision diagnostics.</p>
+</div>
+
+<div id="stacklyBioArrow1">→</div>
+
+</div>
+</a>
+
+<!-- ROW 2 -->
+
+<a href="404.html" style="text-decoration:none;color:inherit">
+<div id="stacklyBioRow2" class="stacklyBioReveal">
+
+<img src="bio3.webp">
+
+<div>
+<h2>Advanced Bio Data Intelligence</h2>
+<p>Machine learning models analyze biological data to reveal patterns in genetics, disease evolution and medical treatments.</p>
+</div>
+
+<div id="stacklyBioArrow2">→</div>
+
+</div>
+</a>
+
+<!-- ROW 3 -->
+
+<a href="404.html" style="text-decoration:none;color:inherit">
+<div id="stacklyBioRow3" class="stacklyBioReveal">
+
+<img src="bio4.webp">
+
+<div>
+<h2>Global Bio Innovation Partnerships</h2>
+<p>Stackly collaborates with research institutes, biotech startups and pharmaceutical companies worldwide.</p>
+</div>
+
+<div id="stacklyBioArrow3">→</div>
+
+</div>
+</a>
+
+<!-- ROW 4 -->
+
+<a href="404.html" style="text-decoration:none;color:inherit">
+<div id="stacklyBioRow4" class="stacklyBioReveal">
+
+<img src="bio6.webp">
+
+<div>
+<h2>Next Generation Drug Discovery</h2>
+<p>AI-driven simulations help researchers design and test pharmaceutical compounds faster than traditional methods.</p>
+</div>
+
+<div id="stacklyBioArrow4">→</div>
+
+</div>
+</a>
+
+<!-- ROW 5 -->
+
+<a href="404.html" style="text-decoration:none;color:inherit">
+<div id="stacklyBioRow5" class="stacklyBioReveal">
+
+<img src="bio7.webp">
+
+<div>
+<h2>Smart Bio Manufacturing</h2>
+<p>Biotechnology production is becoming smarter through automation, robotics and predictive analytics.</p>
+</div>
+
+<div id="stacklyBioArrow5">→</div>
+
+</div>
+</a>
+
+<!-- ROW 6 -->
+
+<a href="404.html" style="text-decoration:none;color:inherit">
+<div id="stacklyBioRow6" class="stacklyBioReveal">
+
+<img src="bio8.webp">
+
+<div>
+<h2>Sustainable Bio Engineering</h2>
+<p>Bioengineering innovations enable eco-friendly manufacturing and sustainable healthcare solutions.</p>
+</div>
+
+<div id="stacklyBioArrow6">→</div>
+
+</div>
+</a>
+
+</section>
+
+<script>
+
+/* SCROLL REVEAL */
+
+function stacklyBioReveal(){
+
+let elements=document.querySelectorAll(".stacklyBioReveal");
+
+for(let i=0;i<elements.length;i++){
+
+let windowHeight=window.innerHeight;
+let elementTop=elements[i].getBoundingClientRect().top;
+let visible=120;
+
+if(elementTop < windowHeight - visible){
+elements[i].classList.add("active");
+}
+
+}
+
+}
+
+window.addEventListener("scroll",stacklyBioReveal);
+
+</script>
+
+</body>
+</html>
+<section class="pricing-section">
+
+<div class="pricing-title reveal">
+<h2>Stackly Bio Pricing</h2>
+<p>Flexible plans for researchers, biotech teams and enterprises</p>
+</div>
+
+<div class="pricing-grid">
+
+<!-- PLAN 1 -->
+
+<div class="pricing-card reveal">
+
+<h3>Starter</h3>
+
+<div class="price">$29<span>/mo</span></div>
+
+<ul>
+<li>Genomic Data Analysis</li>
+<li>Basic AI Insights</li>
+<li>Cloud Storage 50GB</li>
+<li>Email Support</li>
+</ul>
+
+<a href="404.html" class="price-btn">
+Get Started →
+</a>
+
+</div>
+
+
+<!-- PLAN 2 -->
+
+<div class="pricing-card popular reveal">
+
+<div class="tag">Most Popular</div>
+
+<h3>Professional</h3>
+
+<div class="price">$79<span>/mo</span></div>
+
+<ul>
+<li>Advanced AI Genomics</li>
+<li>CRISPR Design Tools</li>
+<li>Cloud Storage 500GB</li>
+<li>Team Collaboration</li>
+
+</ul>
+
+<a href="404.html" class="price-btn">
+Start Plan →
+</a>
+
+</div>
+
+
+<!-- PLAN 3 -->
+
+<div class="pricing-card reveal">
+
+<h3>Enterprise</h3>
+
+<div class="price">$199<span>/mo</span></div>
+
+<ul>
+<li>Full Bio Research Platform</li>
+<li>Drug Discovery AI</li>
+<li>Unlimited Bio Data Storage</li>
+<li>Automation Lab Tools</li>
+
+</ul>
+
+<a href="404.html" class="price-btn">
+Contact Sales →
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+
+<style>
+
+/* PRICING SECTION */
+
+.pricing-section{
+padding:100px 20px;
+background:#fff;
+max-width:1200px;
+margin:auto;
+}
+
+.pricing-title{
+text-align:center;
+margin-bottom:70px;
+}
+
+.pricing-title h2{
+font-size:40px;
+color:#ff4b00;
+margin-bottom:10px;
+}
+
+.pricing-title p{
+font-size:18px;
+}
+
+/* GRID */
+
+.pricing-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:35px;
+}
+
+/* CARD */
+
+.pricing-card{
+border:2px solid white;
+border-radius:20px;
+padding:40px 30px;
+text-align:center;
+transition:.35s;
+position:relative;
+background:black;
+}
+
+/* HOVER */
+
+.pricing-card:hover{
+transform:translateY(-12px);
+border-color:#ff4b00;
+box-shadow:0 20px 35px rgba(255,75,0,0.25);
+}
+
+/* POPULAR */
+
+.popular{
+border-color:#ff4b00;
+transform:scale(1.05);
+}
+
+.tag{
+position:absolute;
+top:-12px;
+left:50%;
+transform:translateX(-50%);
+background:#ff4b00;
+color:#fff;
+padding:6px 18px;
+border-radius:20px;
+font-size:13px;
+}
+
+/* PRICE */
+
+.price{
+font-size:42px;
+font-weight:700;
+margin:15px 0;
+}
+
+.price span{
+font-size:16px;
+}
+
+/* LIST */
+
+.pricing-card ul{
+list-style:none;
+margin:25px 0;
+}
+
+.pricing-card li{
+margin:10px 0;
+}
+
+/* BUTTON */
+
+.price-btn{
+display:inline-block;
+margin-top:15px;
+padding:12px 28px;
+border-radius:30px;
+border:2px solid #ff4b00;
+color:#ff4b00;
+text-decoration:none;
+font-weight:600;
+transition:.3s;
+}
+
+.price-btn:hover{
+background:#ff4b00;
+color:#fff;
+}
+
+/* SCROLL REVEAL */
+
+.reveal{
+opacity:0;
+transform:translateY(60px);
+transition:1s;
+}
+
+.reveal.active{
+opacity:1;
+transform:translateY(0);
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.pricing-title h2{
+font-size:32px;
+}
+
+.popular{
+transform:scale(1);
+}
+
+}
+
+</style>
+
+
+<script>
+
+/* SCROLL REVEAL */
+
+function reveal(){
+
+let reveals=document.querySelectorAll(".reveal");
+
+for(let i=0;i<reveals.length;i++){
+
+let windowHeight=window.innerHeight;
+let elementTop=reveals[i].getBoundingClientRect().top;
+let elementVisible=120;
+
+if(elementTop<windowHeight-elementVisible){
+
+reveals[i].classList.add("active");
+
+}
+
+}
+
+}
+
+window.addEventListener("scroll",reveal);
+
+</script>
+
+</body>
+</html>
+
+
+<style>
+
+/* SECTION */
+
+#stacklyVideoSection2026{
+padding:120px 8%;
+background:burlywood;
+}
+
+/* CONTAINER */
+
+#stacklyVideoContainer2026{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:60px;
+max-width:1300px;
+margin:auto;
+}
+
+/* TEXT */
+
+#stacklyVideoText2026{
+flex:1;
+}
+
+#stacklyVideoText2026 h1{
+font-size:56px;
+line-height:1.1;
+margin-bottom:20px;
+}
+
+#stacklyVideoText2026 p{
+font-size:18px;
+line-height:1.7;
+color:white;
+max-width:520px;
+}
+
+/* VIDEO BOX */
+
+#stacklyVideoBox2026{
+flex:1;
+position:relative;
+cursor:pointer;
+}
+
+#stacklyVideoBox2026 video{
+width:100%;
+border-radius:6px;
+}
+
+/* PLAY BUTTON */
+
+#stacklyPlayButton2026{
+position:absolute;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
+width:70px;
+height:70px;
+border-radius:50%;
+background:rgba(0,0,0,0.6);
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-size:28px;
+cursor:pointer;
+}
+
+/* VIDEO LABEL */
+
+#stacklyVideoLabel2026{
+margin-top:10px;
+font-size:14px;
+color:white;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+#stacklyVideoContainer2026{
+flex-direction:column;
+text-align:center;
+}
+
+#stacklyVideoText2026 h1{
+font-size:34px;
+}
+
+#stacklyVideoText2026 p{
+margin:auto;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<section id="stacklyVideoSection2026">
+
+<div id="stacklyVideoContainer2026">
+
+<!-- LEFT TEXT -->
+
+<div id="stacklyVideoText2026">
+
+<h1>
+We build biotechnology innovation so you can move faster today
+</h1>
+
+<p>
+Stackly Bio Technology brings together AI, data science and
+biotechnology expertise to accelerate research, healthcare
+innovation and life-science transformation.
+</p>
+
+</div>
+
+<!-- RIGHT VIDEO -->
+
+<div id="stacklyVideoBox2026">
+
+<video id="stacklyVideoPlayer2026">
+
+<source src="254679_medium.mp4" type="video/mp4">
+
+</video>
+
+<div id="stacklyPlayButton2026">▶</div>
+
+<div id="stacklyVideoLabel2026">Video</div>
+
+</div>
+
+</div>
+
+</section>
+
+<script>
+
+/* VIDEO PLAY / PAUSE */
+
+const video=document.getElementById("stacklyVideoPlayer2026");
+const button=document.getElementById("stacklyPlayButton2026");
+
+button.onclick=function(){
+
+if(video.paused){
+
+video.play();
+button.style.display="none";
+
+}else{
+
+video.pause();
+button.style.display="flex";
+
+}
+
+}
+
+/* CLICK VIDEO TO PAUSE */
+
+video.onclick=function(){
+
+video.pause();
+button.style.display="flex";
+
+}
+
+</script>
+
+</body>
+</html>
+
+
+<style>
+
+/* SECTION */
+
+#stacklyBioInsightsSection2026{
+padding:110px 8%;
+background:black;
+}
+
+/* HEADING */
+
+#stacklyBioInsightsTitle2026{
+font-size:58px;
+margin-bottom:70px;
+max-width:650px;
+}
+
+/* GRID */
+
+#stacklyBioInsightsGrid2026{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:45px;
+}
+
+/* CARD */
+
+.stacklyBioInsightsCard2026{
+background:white;
+transition:0.4s;
+cursor:pointer;
+display:flex;
+flex-direction:column;
+}
+
+.stacklyBioInsightsCard2026 img{
+width:100%;
+height:220px;
+object-fit:cover;
+}
+
+/* CONTENT */
+
+.stacklyBioInsightsContent2026{
+padding:20px;
+flex:1;
+}
+
+.stacklyBioInsightsContent2026 h3{
+font-size:26px;
+margin-bottom:12px;
+line-height:1.3;
+color: black;
+}
+
+.stacklyBioInsightsContent2026 p{
+font-size:15px;
+color:black;
+line-height:1.6;
+}
+
+/* ARROW BUTTON */
+
+.stacklyBioInsightsArrow2026{
+width:50px;
+height:50px;
+border:2px solid #000;
+display:flex;
+align-items:center;
+justify-content:center;
+margin:20px;
+font-size:20px;
+text-decoration:none;
+color:#000;
+transition:0.3s;
+}
+
+.stacklyBioInsightsArrow2026:hover{
+background:#000;
+color:#fff;
+}
+
+/* HOVER CARD */
+
+.stacklyBioInsightsCard2026:hover{
+transform:translateY(-8px);
+box-shadow:0 20px 40px white;
+}
+
+/* SCROLL REVEAL */
+
+.stacklyBioReveal2026{
+opacity:0;
+transform:translateY(60px);
+transition:1s ease;
+}
+
+.stacklyBioReveal2026.active{
+opacity:1;
+transform:translateY(0);
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+#stacklyBioInsightsGrid2026{
+grid-template-columns:1fr;
+}
+
+#stacklyBioInsightsTitle2026{
+font-size:36px;
+text-align:center;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<section id="stacklyBioInsightsSection2026">
+
+<h2 id="stacklyBioInsightsTitle2026" class="stacklyBioReveal2026">
+Sharp insights shaping the future of Bio Technology
+</h2>
+
+<div id="stacklyBioInsightsGrid2026">
+
+<!-- CARD 1 -->
+
+<div class="stacklyBioInsightsCard2026 stacklyBioReveal2026">
+
+<img src="bio13.webp">
+
+<div class="stacklyBioInsightsContent2026">
+
+<h3>AI Driven Genomics Research</h3>
+
+<p>
+Artificial intelligence accelerates genomic sequencing and enables
+scientists to detect diseases faster and create personalized
+biotechnology treatments.
+</p>
+
+</div>
+
+<a href="404.html" class="stacklyBioInsightsArrow2026">→</a>
+
+</div>
+
+<!-- CARD 2 -->
+
+<div class="stacklyBioInsightsCard2026 stacklyBioReveal2026">
+
+<img src="bio14.webp">
+
+<div class="stacklyBioInsightsContent2026">
+
+<h3>Next Generation Bio Labs</h3>
+
+<p>
+Biotechnology laboratories now integrate robotics, automation
+and machine learning to accelerate life science discoveries.
+</p>
+
+</div>
+
+<a href="404.html" class="stacklyBioInsightsArrow2026">→</a>
+
+</div>
+
+<!-- CARD 3 -->
+
+<div class="stacklyBioInsightsCard2026 stacklyBioReveal2026">
+
+<img src="bio16.webp">
+
+<div class="stacklyBioInsightsContent2026">
+
+<h3>Sustainable Bio Manufacturing</h3>
+
+<p>
+Bio-engineering technologies enable eco-friendly production
+methods that reduce environmental impact in biotechnology.
+</p>
+
+</div>
+
+<a href="404.html" class="stacklyBioInsightsArrow2026">→</a>
+
+</div>
+
+</div>
+
+</section>
+
+<script>
+
+/* SCROLL REVEAL */
+
+function stacklyBioReveal(){
+
+let elements=document.querySelectorAll(".stacklyBioReveal2026");
+
+for(let i=0;i<elements.length;i++){
+
+let windowHeight=window.innerHeight;
+let elementTop=elements[i].getBoundingClientRect().top;
+let visible=120;
+
+if(elementTop < windowHeight - visible){
+
+elements[i].classList.add("active");
+
+}
+
+}
+
+}
+
+window.addEventListener("scroll",stacklyBioReveal);
+
+</script>
+
+</body>
+</html>
+
+
+<style>
+
+/* HERO SECTION */
+
+#stacklyHeroMain2026{
+width:100%;
+min-height:90vh;
+background:black;
+position:relative;
+overflow:hidden;
+padding:90px 8%;
+}
+
+/* CONTAINER */
+
+#stacklyHeroContainer2026{
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:60px;
+max-width:1300px;
+margin:auto;
+}
+
+/* TEXT */
+
+#stacklyHeroText2026{
+flex:1;
+}
+
+#stacklyHeroText2026 h2{
+font-size:28px;
+margin-bottom:10px;
+}
+
+#stacklyHeroText2026 h1{
+font-size:88px;
+line-height:1;
+margin-bottom:20px;
+}
+
+#stacklyHeroText2026 p{
+font-size:22px;
+margin-bottom:30px;
+}
+
+/* BUTTON */
+
+#stacklyHeroBtn2026{
+padding:14px 30px;
+border:2px solid #000;
+background:#fff;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+}
+
+#stacklyHeroBtn2026:hover{
+background:#000;
+color:#fff;
+}
+
+/* IMAGE */
+
+#stacklyHeroImage2026{
+flex:1;
+}
+
+#stacklyHeroImage2026 img{
+width:100%;
+max-width:560px;
+}
+
+/* ORANGE STRAIGHT SHAPES */
+
+#stacklyOrangeBar12026{
+position:absolute;
+width:420px;
+height:90px;
+bottom:120px;
+left:28%;
+}
+
+#stacklyOrangeBar22026{
+position:absolute;
+width:300px;
+height:80px;
+
+top:200px;
+right:20%;
+}
+
+/* FOLLOW SECTION */
+
+#stacklyFollowArea2026{
+text-align:center;
+padding:35px;
+background:#ffffff;
+}
+
+#stacklyFollowTitle2026{
+font-size:22px;
+margin-bottom:10px;
+}
+
+/* ICONS */
+
+#stacklyFollowIcons2026{
+display:flex;
+justify-content:center;
+gap:12px;
+}
+
+.stacklyIcon2026{
+width:40px;
+height:40px;
+background:#000;
+display:flex;
+align-items:center;
+justify-content:center;
+text-decoration:none;
+transition:0.3s;
+}
+
+.stacklyIcon2026:hover{
+background:#ff4b00;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+#stacklyHeroContainer2026{
+flex-direction:column;
+text-align:center;
+}
+
+#stacklyHeroText2026 h1{
+font-size:46px;
+}
+
+#stacklyHeroText2026 p{
+font-size:18px;
+}
+
+#stacklyOrangeBar12026,
+#stacklyOrangeBar22026{
+display:none;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- HERO -->
+
+<section id="stacklyHeroMain2026">
+
+<div id="stacklyOrangeBar12026"></div>
+<div id="stacklyOrangeBar22026"></div>
+
+<div id="stacklyHeroContainer2026">
+
+<div id="stacklyHeroText2026">
+
+<h2>We unite expertise and tech</h2>
+
+<h1>so you can</h1>
+
+<p>outthink, outpace and outperform</p>
+
+<button id="stacklyHeroBtn2026"
+onclick="window.location.href='404.html'">
+See how → </button>
+
+</div>
+
+<div id="stacklyHeroImage2026">
+
+<img src="bio27.webp">
+
+</div>
+
+</div>
+
+</section>
+
+<!-- FOLLOW -->
+
+<section id="stacklyFollowArea2026">
+
+<h3 id="stacklyFollowTitle2026">Follow us</h3>
+
+<div id="stacklyFollowIcons2026">
+
+<a href="404.html" class="stacklyIcon2026">
+
+<svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+<path d="M18.244 2H21l-6.5 7.43L22 22h-6.8l-5.3-7L3.8 22H1l7-8L2 2h6.8l4.8 6.3z"/>
+</svg>
+
+</a>
+
+<a href="404.html" class="stacklyIcon2026">
+
+<svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+<path d="M22 12a10 10 0 1 0-11.5 9.9v-7h-2v-2.9h2V9.7c0-2 1.2-3.1 3-3.1.9 0 1.8.1 1.8.1v2h-1c-1 0-1.3.6-1.3 1.2v1.4h2.3l-.4 2.9h-1.9v7A10 10 0 0 0 22 12z"/>
+</svg>
+
+</a>
+
+<a href="404.html" class="stacklyIcon2026">
+
+<svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+<path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7 0h3.8v2.2h.1c.5-.9 1.9-2.2 4-2.2 4.2 0 5 2.8 5 6.3V24h-4v-7.5c0-1.8 0-4.2-2.6-4.2s-3 2-3 4v7.7h-4V8z"/>
+</svg>
+
+</a>
+
+</div>
+
+</section>
+<style>
+  /* FOLLOW SECTION */
+
+#stacklyFollowArea2026{
+background:#000;
+padding:40px 20px;
+text-align:center;
+}
+
+#stacklyFollowTitle2026{
+color:#fff;
+font-size:22px;
+margin-bottom:20px;
+letter-spacing:1px;
+}
+
+/* ICON CONTAINER */
+
+#stacklyFollowIcons2026{
+display:flex;
+justify-content:center;
+gap:18px;
+flex-wrap:wrap;
+}
+
+/* ICON STYLE */
+
+.stacklyIcon2026{
+width:45px;
+height:45px;
+background:#ff4b00;
+display:flex;
+align-items:center;
+justify-content:center;
+border-radius:50%;
+text-decoration:none;
+transition:0.3s;
+}
+
+/* HOVER EFFECT */
+
+.stacklyIcon2026:hover{
+background:#fff;
+transform:translateY(-5px);
+}
+
+.stacklyIcon2026:hover svg{
+fill:#ff4b00;
+}
+
+/* MOBILE */
+
+@media(max-width:500px){
+
+#stacklyFollowArea2026{
+padding:30px 15px;
+}
+
+#stacklyFollowTitle2026{
+font-size:20px;
+}
+
+.stacklyIcon2026{
+width:40px;
+height:40px;
+}
+
+}
+</style>
+<section class="bio-hero">
+
+<div class="hero-overlay"></div>
+
+<div class="hero-container reveal">
+
+<h1>
+Let’s Re<span class="highlight">(Bio)</span>agine Your Biotechnology Future
+</h1>
+
+<p>
+Biotechnology innovation starts with powerful AI-driven genomic research,
+drug discovery platforms and advanced bioinformatics.
+</p>
+
+<a href="404.html" class="hero-btn">
+Talk to Our Bio Experts →
+</a>
+
+</div>
+
+</section>
+
+
+<style>
+
+/* HERO */
+
+.bio-hero{
+
+position:relative;
+
+padding:120px 20px;
+
+background-image:url("bio18.webp");
+
+background-size:cover;
+background-position:center;
+
+color:#fff;
+
+}
+
+/* OVERLAY */
+
+.hero-overlay{
+
+position:absolute;
+top:0;
+left:0;
+
+width:100%;
+height:100%;
+
+background:linear-gradient(90deg,#000,#ff4b00);
+
+opacity:.85;
+
+}
+
+/* CONTAINER */
+
+.hero-container{
+
+position:relative;
+z-index:2;
+
+max-width:1000px;
+margin:auto;
+
+}
+
+/* TITLE */
+
+.hero-container h1{
+
+font-size:44px;
+margin-bottom:15px;
+
+}
+
+.highlight{
+
+color:#ff4b00;
+
+}
+
+/* TEXT */
+
+.hero-container p{
+
+font-size:18px;
+max-width:600px;
+margin-bottom:25px;
+
+}
+
+/* BUTTON */
+
+.hero-btn{
+
+display:inline-block;
+
+border:2px solid #fff;
+
+padding:14px 28px;
+
+border-radius:30px;
+
+color:#fff;
+text-decoration:none;
+
+font-weight:600;
+
+transition:.3s;
+
+}
+
+.hero-btn:hover{
+
+background:blue;
+border-color:#ff4b00;
+
+}
+
+/* REVEAL */
+
+.reveal{
+
+opacity:0;
+transform:translateY(50px);
+transition:1s;
+
+}
+
+.reveal.active{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+.hero-container h1{
+font-size:30px;
+}
+
+.hero-container p{
+font-size:16px;
+}
+
+.bio-hero{
+padding:80px 20px;
+}
+
+}
+
+</style>
+
+
+<script>
+
+/* SCROLL REVEAL */
+
+function reveal(){
+
+let reveals=document.querySelectorAll(".reveal");
+
+for(let i=0;i<reveals.length;i++){
+
+let windowHeight=window.innerHeight;
+let elementTop=reveals[i].getBoundingClientRect().top;
+let elementVisible=120;
+
+if(elementTop<windowHeight-elementVisible){
+
+reveals[i].classList.add("active");
+
+}
+
+}
+
+}
+
+window.addEventListener("scroll",reveal);
+
+</script>
+</body>
+</html>
+
+
+<!-- STACKLY FOOTER -->
+
+<footer id="stacklyMainFooter2026">
+
+<div id="stacklyFooterContainer2026">
+
+<!-- LOGO + ABOUT -->
+
+<div id="stacklyFooterAbout2026">
+
+<img src="stacklylogo (1).webp" id="stacklyFooterLogo2026">
+
+<p id="stacklyFooterText2026">
+Stackly Bio Technology empowers research, healthcare innovation
+and biotechnology solutions through AI-driven platforms and
+advanced life science technologies.
+</p>
+
+<div id="stacklyFooterSocial2026">
+
+<a href="404.html" class="stacklyFooterIcon2026">X</a> <a href="404.html" class="stacklyFooterIcon2026">f</a> <a href="404.html" class="stacklyFooterIcon2026">in</a> <a href="404.html" class="stacklyFooterIcon2026">▶</a>
+
+</div>
+
+</div>
+
+<!-- QUICK LINKS -->
+
+<div class="stacklyFooterColumn2026">
+
+<h3>Quick Links</h3>
+
+<ul>
+
+<li><a href="index.html">Home</a></li>
+<li><a href="features.html">Features</a></li>
+<li><a href="services.html">Servies</a></li>
+<li><a href="about.html">About</a></li>
+<li><a href="blog.html">Blog</a></li>
+<li><a href="contact.html">Contact</a></li>
+
+</ul>
+
+</div>
+
+<!-- SERVICES -->
+
+<div class="stacklyFooterColumn2026">
+
+<h3>Services</h3>
+
+<ul>
+
+<li><a href="404.html">AI Biotechnology</a></li>
+<li><a href="404.html">Genomics Research</a></li>
+<li><a href="404.html">Bio Data Analytics</a></li>
+<li><a href="404.html">Medical Innovation</a></li>
+<li><a href="404.html">Bio Manufacturing</a></li>
+
+</ul>
+
+</div>
+
+<!-- CONTACT -->
+
+<div class="stacklyFooterColumn2026">
+
+<h3>Contact Us</h3>
+
+<p>Email: info@stacklybio.com</p>
+<p>Phone: +91 98765 43210</p>
+<p>Bangalore, India</p>
+
+</div>
+
+<!-- SUBSCRIBE -->
+
+<div class="stacklyFooterColumn2026">
+
+<h3>Subscribe</h3>
+
+<p>Stay updated with biotechnology innovation news.</p>
+
+<form action="404.html">
+
+<input 
+type="email" 
+placeholder="Enter your email"
+id="stacklySubscribeInput2026"
+required
+>
+
+<button type="submit" id="stacklySubscribeBtn2026">
+Subscribe →
+</button>
+
+</form>
+
+</div>
+
+</div>
+
+<!-- COPYRIGHT -->
+
+<div id="stacklyFooterBottom2026">
+
+© 2026 Stackly Bio Technology. All rights reserved.
+
+</div>
+
+</footer>
+
+<style>
+
+/* FOOTER */
+
+#stacklyMainFooter2026{
+background:#0b0b0b;
+color:#fff;
+padding-top:60px;
+font-family:Arial;
+}
+
+/* CONTAINER */
+
+#stacklyFooterContainer2026{
+display:grid;
+grid-template-columns:2fr 1fr 1fr 1fr 1fr;
+gap:40px;
+max-width:1300px;
+margin:auto;
+padding:0 8% 60px;
+}
+
+/* LOGO */
+
+#stacklyFooterLogo2026{
+width:160px;
+margin-bottom:15px;
+}
+
+/* TEXT */
+
+#stacklyFooterText2026{
+font-size:14px;
+line-height:1.6;
+margin-bottom:20px;
+opacity:0.8;
+}
+
+/* SOCIAL */
+
+#stacklyFooterSocial2026{
+display:flex;
+gap:10px;
+}
+
+.stacklyFooterIcon2026{
+width:36px;
+height:36px;
+background:#fff;
+color:#000;
+display:flex;
+align-items:center;
+justify-content:center;
+text-decoration:none;
+font-size:14px;
+transition:0.3s;
+}
+
+.stacklyFooterIcon2026:hover{
+background:#ff4b00;
+color:#fff;
+}
+
+/* COLUMNS */
+
+.stacklyFooterColumn2026 h3{
+margin-bottom:15px;
+font-size:18px;
+}
+
+.stacklyFooterColumn2026 ul{
+list-style:none;
+}
+
+.stacklyFooterColumn2026 ul li{
+margin-bottom:8px;
+}
+
+.stacklyFooterColumn2026 ul li a{
+text-decoration:none;
+color:#ccc;
+font-size:14px;
+}
+
+.stacklyFooterColumn2026 ul li a:hover{
+color:#fff;
+}
+
+/* CONTACT */
+
+.stacklyFooterColumn2026 p{
+font-size:14px;
+margin-bottom:8px;
+opacity:0.8;
+}
+
+/* SUBSCRIBE */
+
+#stacklySubscribeInput2026{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+margin-bottom:10px;
+}
+
+#stacklySubscribeBtn2026{
+padding:10px 20px;
+background:#ff4b00;
+border:none;
+color:white;
+cursor:pointer;
+}
+
+/* BOTTOM */
+
+#stacklyFooterBottom2026{
+text-align:center;
+padding:20px;
+background:#050505;
+font-size:13px;
+opacity:0.7;
+}
+
+/* MOBILE */
+
+@media(max-width:900px){
+
+#stacklyFooterContainer2026{
+grid-template-columns:1fr 1fr;
+}
+
+}
+
+@media(max-width:600px){
+
+#stacklyFooterContainer2026{
+grid-template-columns:1fr;
+text-align:center;
+}
+
+#stacklyFooterSocial2026{
+justify-content:center;
+}
+
+}
+/* MOBILE */
+
+@media(max-width:900px){
+
+#stacklyFooterContainer2026{
+grid-template-columns:1fr 1fr;
+}
+
+}
+
+@media(max-width:600px){
+
+#stacklyFooterContainer2026{
+grid-template-columns:1fr;
+text-align:left;   /* FIXED */
+}
+
+#stacklyFooterSocial2026{
+justify-content:flex-start;   /* FIXED */
+}
+
+}
+</style>
