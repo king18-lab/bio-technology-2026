@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>404 | Stackly Bio Technology</title>
+
+<style>
+
+/* PAGE */
+#stacklyBio404Container{
+min-height:100vh;
+width:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+text-align:center;
+background:linear-gradient(135deg,#020617,#0f172a);
+color:white;
+font-family:Arial, sans-serif;
+padding:40px 20px;
+position:relative;
+overflow:hidden;
+}
+
+/* 404 NUMBER */
+#stacklyBio404Number{
+font-size:clamp(70px,12vw,140px);
+font-weight:700;
+letter-spacing:6px;
+margin-bottom:10px;
+}
+
+/* TITLE */
+#stacklyBio404Title{
+font-size:clamp(22px,5vw,40px);
+margin-bottom:12px;
+}
+
+/* DESCRIPTION */
+#stacklyBio404Desc{
+font-size:clamp(15px,3vw,18px);
+max-width:600px;
+line-height:1.6;
+opacity:0.8;
+margin-bottom:35px;
+}
+
+/* BUTTON CONTAINER */
+#stacklyBio404Buttons{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+justify-content:center;
+margin-bottom:20px;
+}
+
+/* BUTTON - HOME */
+#stacklyBio404HomeBtn{
+padding:14px 28px;
+border:2px solid #38bdf8;
+background:transparent;
+color:#38bdf8;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+border-radius:4px;
+min-width:160px;
+}
+
+#stacklyBio404HomeBtn:hover{
+background:#38bdf8;
+color:black;
+}
+
+/* BUTTON - BACK */
+#stacklyBio404BackBtn{
+padding:14px 28px;
+border:2px solid #ff4b00;
+background:transparent;
+color:#ff4b00;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+border-radius:4px;
+min-width:160px;
+}
+
+#stacklyBio404BackBtn:hover{
+background:#ff4b00;
+color:white;
+}
+
+/* BUTTON - PREVIOUS PAGE */
+#stacklyBio404PrevBtn{
+padding:14px 28px;
+border:2px solid #10b981;
+background:transparent;
+color:#10b981;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+border-radius:4px;
+min-width:160px;
+}
+
+#stacklyBio404PrevBtn:hover{
+background:#10b981;
+color:white;
+}
+
+/* DNA ICON */
+#stacklyBio404DNA{
+position:absolute;
+top:10%;
+left:5%;
+width:120px;
+height:120px;
+opacity:0.3;
+animation:spinDNA 8s linear infinite;
+}
+
+#stacklyBio404DNA span{
+display:block;
+width:10px;
+height:10px;
+background:#38bdf8;
+border-radius:50%;
+margin:12px auto;
+}
+
+/* FLOAT CIRCLE */
+#stacklyBio404Circle{
+position:absolute;
+bottom:-80px;
+right:-80px;
+width:220px;
+height:220px;
+border-radius:50%;
+background:rgba(56,189,248,0.08);
+animation:floatCircle 6s ease-in-out infinite;
+}
+
+/* ANIMATIONS */
+@keyframes spinDNA{
+0%{transform:rotate(0deg);}
+100%{transform:rotate(360deg);}
+}
+
+@keyframes floatCircle{
+0%,100%{transform:translateY(0px);}
+50%{transform:translateY(-20px);}
+}
+
+/* MOBILE */
+@media(max-width:600px){
+#stacklyBio404Buttons{
+flex-direction:column;
+gap:12px;
+width:100%;
+max-width:280px;
+}
+
+#stacklyBio404HomeBtn,
+#stacklyBio404BackBtn,
+#stacklyBio404PrevBtn{
+width:100%;
+}
+
+}
+
+@media(max-width:400px){
+#stacklyBio404Desc{
+font-size:14px;
+}
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="stacklyBio404Container">
+
+<div id="stacklyBio404Number">404</div>
+
+<div id="stacklyBio404Title">
+Bio Technology Page Missing
+</div>
+
+<div id="stacklyBio404Desc">
+The research page you're looking for cannot be found in the Stackly Bio Technology system.
+It may have been moved or removed from the innovation database.
+</div>
+
+<!-- BUTTONS -->
+<div id="stacklyBio404Buttons">
+<button id="stacklyBio404HomeBtn" onclick="goHome()">
+Home Page
+</button>
+
+
+
+<button id="stacklyBio404PrevBtn" onclick="goToPreviousPage()">
+Previous Page
+</button>
+</div>
+
+<!-- Navigation info (hidden) -->
+<div style="font-size: 12px; color: #666; margin-top: 20px;">
+Click "Previous Page" to return to the last page you visited
+</div>
+
+</div>
+
+<!-- DNA decoration -->
+<div id="stacklyBio404DNA">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+
+<div id="stacklyBio404Circle"></div>
+
+<!-- JS -->
+<script>
+
+/* Go Home */
+function goHome(){
+window.location.href = "index.html";
+}
+
+/* Go Back (history back) */
+function goBack(){
+if(document.referrer && document.referrer !== window.location.href){
+history.back();
+} else {
+window.location.href = "index.html";
+}
+}
+
+/* Go to Previous Page (alternative method) */
+function goToPreviousPage(){
+// Try to go back in history
+if (window.history.length > 1) {
+window.history.back();
+} else {
+// If no history, go to home
+window.location.href = "index.html";
+}
+}
+
+// Optional: Log history length for debugging
+console.log('History length:', window.history.length);
+console.log('Referrer:', document.referrer);
+
+</script>
+
+</body>
+</html>
